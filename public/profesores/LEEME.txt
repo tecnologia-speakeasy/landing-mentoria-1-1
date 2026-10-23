@@ -1,0 +1,7 @@
+Carga aquí las fotos de los profesores de mentoría.
+
+- Nombre del archivo: el mismo "slug" del profesor en db/profesores.json
+  (ej. nombre-apellido.webp). Formato .webp o .jpg, cuadradas, mínimo 256x256.
+- En db/profesores.json, "foto_url" debe apuntar a esa ruta:
+    "foto_url": "/profesores/nombre-apellido.webp"
+- Si una foto falta (o foto_url es null), la UI muestra las iniciales del profesor.

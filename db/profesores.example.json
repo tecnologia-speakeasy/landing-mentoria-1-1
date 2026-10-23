@@ -1,0 +1,31 @@
+{
+  "_instrucciones": [
+    "Copia este archivo a db/profesores.json, reemplaza los profesores de ejemplo y ejecuta: npm run db:seed",
+    "slug: identificador único (minúsculas, sin tildes). Si vuelves a correr el seed, el profesor se actualiza por su slug.",
+    "foto_url: ruta dentro de /public (ej. /profesores/nombre-apellido.webp). Si falta, la UI muestra las iniciales.",
+    "disponibilidad: por día (lun, mar, mie, jue, vie, sab, dom), rangos 'HH:MM-HH:MM' en hora de Colombia.",
+    "El fin del rango es exclusivo: '08:00-12:00' con sesiones de 30 min genera 08:00, 08:30 ... 11:30.",
+    "Cada vez que corres el seed, la disponibilidad de los profesores del archivo se REEMPLAZA por la del archivo."
+  ],
+  "profesores": [
+    {
+      "nombre": "Profesor de Ejemplo Uno",
+      "slug": "profesor-ejemplo-uno",
+      "foto_url": "/profesores/profesor-ejemplo-uno.webp",
+      "disponibilidad": {
+        "lun": ["08:00-12:00", "14:00-18:00"],
+        "mie": ["08:00-12:00"],
+        "vie": ["18:00-21:00"]
+      }
+    },
+    {
+      "nombre": "Profesora de Ejemplo Dos",
+      "slug": "profesora-ejemplo-dos",
+      "foto_url": null,
+      "disponibilidad": {
+        "mar": ["06:00-09:00"],
+        "jue": ["06:00-09:00", "19:00-22:00"]
+      }
+    }
+  ]
+}
