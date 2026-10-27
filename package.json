@@ -10,7 +10,8 @@
     "db:setup": "node scripts/setup-db.mjs",
     "db:seed": "node scripts/seed-profesores.mjs",
     "db:load-emails": "node scripts/load-emails.mjs",
-    "zoom:test": "node scripts/zoom-test.mjs"
+    "zoom:test": "node scripts/zoom-test.mjs",
+    "ghl:test": "node scripts/webhook-test.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

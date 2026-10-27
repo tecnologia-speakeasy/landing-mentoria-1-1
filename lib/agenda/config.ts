@@ -98,6 +98,18 @@ export function slotLabel(fechaISO: string, hora: string, tz: string = APP_TZ): 
   return `${dia} ${fecha} · ${hm}`;
 }
 
+// Zona horaria que envía el navegador del estudiante. Si no es una zona IANA
+// válida se usa la de Colombia (una inválida haría fallar toLocaleString).
+export function tzSegura(tz?: string): string {
+  if (!tz) return APP_TZ;
+  try {
+    new Intl.DateTimeFormat("es-CO", { timeZone: tz });
+    return tz;
+  } catch {
+    return APP_TZ;
+  }
+}
+
 // ISO DOW (1=Lunes ... 7=Domingo) de una fecha YYYY-MM-DD.
 // Se parsea a mediodía local para evitar bordes de zona horaria.
 export function isoDow(fechaISO: string): number {

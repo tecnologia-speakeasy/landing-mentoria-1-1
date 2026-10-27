@@ -1,5 +1,6 @@
+import { randomBytes } from "crypto";
 import { query, withTx } from "./db";
-import { bookingDates, BOOKING_SLOTS, SLOT_DURATION_MIN, slotLabel, isoDow, slotReservable } from "./config";
+import { bookingDates, BOOKING_SLOTS, SLOT_DURATION_MIN, slotLabel, isoDow, slotReservable, tzSegura } from "./config";
 import { getMeetingProvider, type MeetingInput } from "./meeting";
 import { getNotifier } from "./notifier";
 import { enviarWhatsApp, manychatConfigurado } from "@/lib/manychat";
@@ -128,7 +129,8 @@ export async function reservar(params: {
   hora: string; // "HH:MM"
   tz?: string; // zona horaria del estudiante (para mostrar hora local en avisos)
 }): Promise<CitaDetalle> {
-  const { estudianteId, estudianteNombre, estudianteEmail, fechaISO, hora, tz } = params;
+  const { estudianteId, estudianteNombre, estudianteEmail, fechaISO, hora } = params;
+  const tz = tzSegura(params.tz);
 
   if (!esSlotValido(fechaISO, hora)) {
     throw new BookingError("slot_invalido", "Ese horario no está disponible para agendar.");
@@ -142,6 +144,8 @@ export async function reservar(params: {
   }
   const dow = isoDow(fechaISO);
   const horaStr = `${hora}:00`; // "06:30:00"
+  // Token no adivinable para el enlace corto /unirse/<token> (12 caracteres URL-safe).
+  const token = randomBytes(9).toString("base64url");
 
   const cita = await withTx(async (c) => {
     // Serializamos por slot y por estudiante (orden fijo: slot, luego estudiante)
@@ -209,12 +213,12 @@ export async function reservar(params: {
     const ins = await c.query<{ id: number }>(
       `INSERT INTO mentoria.citas
          (profesor_id, estudiante_id, fecha, hora_inicio, duracion_min,
-          zoom_meeting_id, zoom_join_url, zoom_start_url)
-       VALUES ($1, $2, $3::date, $4::time, $5, $6, $7, $8)
+          zoom_meeting_id, zoom_join_url, zoom_start_url, token)
+       VALUES ($1, $2, $3::date, $4::time, $5, $6, $7, $8, $9)
        RETURNING id`,
       [
         profesor.id, estudianteId, fechaISO, horaStr, SLOT_DURATION_MIN,
-        meeting.meetingId, meeting.joinUrl, meeting.startUrl,
+        meeting.meetingId, meeting.joinUrl, meeting.startUrl, token,
       ]
     );
 
@@ -265,40 +269,76 @@ export async function reservar(params: {
     console.error("[reservar] WhatsApp (ManyChat) falló:", e);
   }
 
-  // Webhook a n8n (best-effort): n8n puede registrar la mentoría en el Google
-  // Sheet del profesor asignado con nombre, email, día y hora (Colombia). No
-  // bloquea ni revierte la cita si falla. Solo se dispara si N8N_WEBHOOK_CITA
-  // está definido.
-  try {
-    const webhook = process.env.N8N_WEBHOOK_CITA;
-    if (webhook) {
-      const cuando = slotLabel(fechaISO, hora); // Colombia: "lunes 30 jun · 6:30 AM"
-      await fetch(webhook, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(process.env.N8N_WEBHOOK_SECRET
-            ? { "x-webhook-secret": process.env.N8N_WEBHOOK_SECRET }
-            : {}),
-        },
-        body: JSON.stringify({
-          evento: "mentoria_agendada",
-          citaId: cita.id,
-          profesor: cita.profesor.nombre, // para elegir el sheet del profesor
-          profesorId: cita.profesor.id,
-          estudianteNombre,
-          estudianteEmail,
-          fecha: fechaISO, // fecha Colombia (YYYY-MM-DD)
-          hora, // hora Colombia (HH:MM)
-          cuando, // etiqueta legible Colombia (día + fecha + hora)
-          joinUrl: cita.joinUrl ?? "",
-        }),
-        signal: AbortSignal.timeout(10_000),
-      });
-    }
-  } catch (e) {
-    console.error("[reservar] webhook n8n falló (cita ya creada):", e);
-  }
+  // Webhooks (best-effort, en paralelo). No bloquean ni revierten la cita si
+  // fallan; cada uno solo se dispara si su URL está definida.
+  //  - n8n: registra la mentoría en el Google Sheet del profesor asignado.
+  //  - GoHighLevel: dispara el workflow (trigger "Inbound Webhook") que busca
+  //    al contacto por estudianteEmail y le envía la plantilla de WhatsApp.
+  const payload: WebhookCita = {
+    evento: "mentoria_agendada",
+    citaId: cita.id,
+    profesor: cita.profesor.nombre, // para elegir el sheet del profesor
+    profesorId: cita.profesor.id,
+    estudianteNombre,
+    estudianteEmail,
+    fecha: fechaISO, // fecha Colombia (YYYY-MM-DD)
+    hora, // hora Colombia (HH:MM)
+    cuando: slotLabel(fechaISO, hora), // Colombia: "lunes 30 jun · 6:30 AM"
+    cuandoLocal: slotLabel(fechaISO, hora, tz), // misma etiqueta en la hora del estudiante
+    tz,
+    joinUrl: cita.joinUrl ?? "",
+    token, // para el botón "Unirse": https://<dominio>/unirse/{{token}}
+  };
+  await Promise.all([
+    enviarWebhook("n8n", process.env.N8N_WEBHOOK_CITA, payload, process.env.N8N_WEBHOOK_SECRET),
+    enviarWebhook("GoHighLevel", process.env.GHL_WEBHOOK_CITA, payload),
+  ]);
 
   return cita;
+}
+
+// Cuerpo JSON que reciben los webhooks. Si cambia, actualizar también el
+// ejemplo de scripts/webhook-test.mjs (lo usa GoHighLevel para mapear campos).
+type WebhookCita = {
+  evento: "mentoria_agendada";
+  citaId: number;
+  profesor: string;
+  profesorId: number;
+  estudianteNombre: string;
+  estudianteEmail: string;
+  fecha: string;
+  hora: string;
+  cuando: string;
+  cuandoLocal: string;
+  tz: string;
+  joinUrl: string;
+  token: string;
+};
+
+async function enviarWebhook(
+  nombre: string,
+  url: string | undefined,
+  payload: WebhookCita,
+  secret?: string
+): Promise<void> {
+  if (!url) return;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(secret ? { "x-webhook-secret": secret } : {}),
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!res.ok) {
+      console.error(
+        `[reservar] webhook ${nombre} respondió ${res.status} (cita ya creada):`,
+        (await res.text()).slice(0, 250)
+      );
+    }
+  } catch (e) {
+    console.error(`[reservar] webhook ${nombre} falló (cita ya creada):`, e);
+  }
 }
