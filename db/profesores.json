@@ -1,12 +1,12 @@
 {
   "profesores": [
-    { "nombre": "David Alejandro Quiroga Orozco", "slug": "david-quiroga-orozco", "foto_url": "", "disponibilidad": {} },
-    { "nombre": "Paula Andrea Londoño Trujillo", "slug": "paula-londono-trujillo", "foto_url": "", "disponibilidad": {} },
-    { "nombre": "Daniel Felipe Valencia Eraso", "slug": "daniel-valencia-eraso", "foto_url": "", "disponibilidad": {} },
+    { "nombre": "David Alejandro Quiroga Orozco", "slug": "david-quiroga-orozco", "foto_url": "/profesores/david-quiroga-orozco.png", "disponibilidad": {} },
+    { "nombre": "Paula Andrea Londoño Trujillo", "slug": "paula-londono-trujillo", "foto_url": "/profesores/paula-londono-trujillo.png", "disponibilidad": {} },
+    { "nombre": "Daniel Felipe Valencia Eraso", "slug": "daniel-valencia-eraso", "foto_url": "/profesores/daniel-valencia-eraso.png", "disponibilidad": {} },
     { "nombre": "Daniel Felipe Moreno Camargo", "slug": "daniel-moreno-camargo", "foto_url": "", "disponibilidad": {} },
-    { "nombre": "Alejandra Rivera Cruz", "slug": "alejandra-rivera-cruz", "foto_url": "", "disponibilidad": {} },
+    { "nombre": "Alejandra Rivera Cruz", "slug": "alejandra-rivera-cruz", "foto_url": "/profesores/alejandra-rivera-cruz.png", "disponibilidad": {} },
     {
-      "nombre": "Nathalia Mesa Bonilla", "slug": "nathalia-mesa-bonilla", "foto_url": "",
+      "nombre": "Nathalia Mesa Bonilla", "slug": "nathalia-mesa-bonilla", "foto_url": "/profesores/nathalia-mesa-bonilla.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -14,7 +14,7 @@
       }
     },
     {
-      "nombre": "Yeffrey Jair Ternera Gutiérrez", "slug": "yeffrey-ternera-gutierrez", "foto_url": "",
+      "nombre": "Yeffrey Jair Ternera Gutiérrez", "slug": "yeffrey-ternera-gutierrez", "foto_url": "/profesores/yeffrey-ternera-gutierrez.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -22,7 +22,7 @@
       }
     },
     {
-      "nombre": "Tatiana Granada Gomez", "slug": "tatiana-granada-gomez", "foto_url": "",
+      "nombre": "Tatiana Granada Gomez", "slug": "tatiana-granada-gomez", "foto_url": "/profesores/tatiana-granada-gomez.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -30,7 +30,7 @@
       }
     },
     {
-      "nombre": "Juan Diego Acevedo Sanchez", "slug": "juan-acevedo-sanchez", "foto_url": "",
+      "nombre": "Juan Diego Acevedo Sanchez", "slug": "juan-acevedo-sanchez", "foto_url": "/profesores/juan-acevedo-sanchez.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -38,7 +38,7 @@
       }
     },
     {
-      "nombre": "Edwar Orlando Martinez Fuentes", "slug": "edwar-martinez-fuentes", "foto_url": "",
+      "nombre": "Edwar Orlando Martinez Fuentes", "slug": "edwar-martinez-fuentes", "foto_url": "/profesores/edwar-martinez-fuentes.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -46,7 +46,7 @@
       }
     },
     {
-      "nombre": "Daniel Felipe Rendón Ramírez", "slug": "daniel-rendon-ramirez", "foto_url": "",
+      "nombre": "Daniel Felipe Rendón Ramírez", "slug": "daniel-rendon-ramirez", "foto_url": "/profesores/daniel-rendon-ramirez.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -54,7 +54,7 @@
       }
     },
     {
-      "nombre": "Manuel Camilo Loaiza Quintero", "slug": "manuel-loaiza-quintero", "foto_url": "",
+      "nombre": "Manuel Camilo Loaiza Quintero", "slug": "manuel-loaiza-quintero", "foto_url": "/profesores/manuel-loaiza-quintero.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -62,7 +62,7 @@
       }
     },
     {
-      "nombre": "Verónica Saldarriaga Garro", "slug": "veronica-saldarriaga-garro", "foto_url": "",
+      "nombre": "Verónica Saldarriaga Garro", "slug": "veronica-saldarriaga-garro", "foto_url": "/profesores/veronica-saldarriaga-garro.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
@@ -70,15 +70,15 @@
       }
     },
     {
-      "nombre": "Juan Sebastián Galvis Bohórquez", "slug": "juan-galvis-bohorquez", "foto_url": "",
+      "nombre": "Juan Sebastián Galvis Bohórquez", "slug": "juan-galvis-bohorquez", "foto_url": "/profesores/juan-galvis-bohorquez.png",
       "disponibilidad": {
         "mie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "jue": ["08:00-10:00", "10:30-12:00", "13:00-16:30"],
         "vie": ["08:00-10:00", "10:30-12:00", "13:00-16:30"]
       }
     },
-    { "nombre": "Juan Pedro Calle Rodríguez", "slug": "juan-calle-rodriguez", "foto_url": "", "disponibilidad": {} },
+    { "nombre": "Juan Pedro Calle Rodríguez", "slug": "juan-calle-rodriguez", "foto_url": "/profesores/juan-calle-rodriguez.png", "disponibilidad": {} },
     { "nombre": "Jose David Gutierrez", "slug": "jose-david-gutierrez", "foto_url": "", "disponibilidad": {} },
-    { "nombre": "Christian Camilo Velilla Cepeda", "slug": "christian-velilla-cepeda", "foto_url": "", "disponibilidad": {} }
+    { "nombre": "Christian Camilo Velilla Cepeda", "slug": "christian-velilla-cepeda", "foto_url": "/profesores/christian-velilla-cepeda.png", "disponibilidad": {} }
   ]
 }
