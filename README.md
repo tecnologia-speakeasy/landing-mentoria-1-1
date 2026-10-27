@@ -88,6 +88,8 @@ Al agendar (después de guardar la cita; si alguna falla, la cita queda igual):
   plantilla de WhatsApp aprobada. El contacto debe existir en GoHighLevel con su
   teléfono: la app no pide teléfono.
 - **n8n**: POST a `N8N_WEBHOOK_CITA` (p.ej. para el Google Sheet del profesor).
+  `npm run n8n:test` envía una mentoría de ejemplo; con una URL `/webhook-test/`,
+  antes pulsar *Listen for test event* en el nodo Webhook de n8n.
 - **ManyChat** (opcional): si hay `MANYCHAT_API_TOKEN` y el estudiante tiene `manychat_id`.
 
 Los webhooks reciben este JSON:
